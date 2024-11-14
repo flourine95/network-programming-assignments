@@ -1,4 +1,4 @@
-package lab7;
+package lab7.v1;
 
 
 import java.io.IOException;
