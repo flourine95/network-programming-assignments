@@ -51,6 +51,7 @@ public class OneConnect extends Thread {
         String token1, token2;
 
         token1 = tokenizer.nextToken();
+        // no such element try catch
         token2 = tokenizer.nextToken();
         operator = line.charAt(token1.length());
 
