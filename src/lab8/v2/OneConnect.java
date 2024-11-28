@@ -63,15 +63,15 @@ public class OneConnect extends Thread {
         operand2 = Double.parseDouble(token2.trim());
     }
 
-    private double executeCommand() {
+    private double executeCommand() throws CaculatorException {
         double res = 0;
         switch (operator) {
-            case "+" -> res = operand1 + operand2;
-            case "-" -> res = operand1 - operand2;
-            case "*" -> res = operand1 * operand2;
-            case "/" -> {
+            case '+' -> res = operand1 + operand2;
+            case '-' -> res = operand1 - operand2;
+            case '*' -> res = operand1 * operand2;
+            case '/' -> {
                 if (Double.isInfinite(res)) {
-                    throw new CaculatorException()
+                    throw new CaculatorException("loi chia cho 0");
                 }
                 res = operand1 / operand2;
             }
