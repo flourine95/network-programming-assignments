@@ -1,4 +1,4 @@
-package lab9;
+package lab9.v2.models;
 
 public class Student {
     private String id;
@@ -11,13 +11,11 @@ public class Student {
         this.avgScore = avgScore;
     }
 
-    public String getId() { return id; }
-    public String getFullName() { return fullName; }
-    public double getAvgScore() { return avgScore; }
-    
+
     public boolean hasId(String id) {
         return this.id.equalsIgnoreCase(id);
     }
+
     public boolean hasName(String name) {
         return fullName.toLowerCase().contains(name.toLowerCase());
     }

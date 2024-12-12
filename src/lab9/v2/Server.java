@@ -1,4 +1,5 @@
-package lab9;
+package lab9.v2;
+
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,7 +23,7 @@ public class Server {
         System.out.println("Server is running on port " + PORT);
         while (isRunning) {
             try {
-                new OneConnect(serverSocket.accept()).run();
+                new Thread(new OneConnect(serverSocket.accept())).start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
