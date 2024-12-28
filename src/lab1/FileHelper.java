@@ -6,8 +6,7 @@ public class FileHelper {
 
     public static void main(String[] args) {
         String path = "D:\\test - Copy";
-
-        System.out.println(delete(path, false));
+        System.out.println(delete(path, true));
     }
 
     public static boolean delete(String path, boolean option) {
