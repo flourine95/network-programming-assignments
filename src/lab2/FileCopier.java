@@ -61,7 +61,10 @@ public class FileCopier {
             try {
                 File parentDir = info.destinationFile.getParentFile();
                 if (!parentDir.exists()) {
-                    parentDir.mkdirs();
+                    boolean created = parentDir.mkdirs();
+                    if (!created && !parentDir.exists()) {
+                        throw new IOException("Không thể tạo thư mục: " + parentDir.getAbsolutePath());
+                    }
                 }
 
                 Files.copy(info.sourceFile.toPath(), info.destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
