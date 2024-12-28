@@ -14,28 +14,28 @@ public class FileHelper {
         return option ? deleteAll(file) : deleteFilesOnly(file);
     }
 
-    private static boolean deleteAll(File file) {
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
+    private static boolean deleteAll(File f) {
+        if (f.isDirectory()) {
+            File[] files = f.listFiles();
             if (files != null) {
-                for (File subFile : files) {
-                    deleteAll(subFile);
+                for (File file : files) {
+                    deleteAll(file);
                 }
             }
         }
-        return file.delete();
+        return f.delete();
     }
 
-    private static boolean deleteFilesOnly(File file) {
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
+    private static boolean deleteFilesOnly(File f) {
+        if (f.isDirectory()) {
+            File[] files = f.listFiles();
             if (files != null) {
-                for (File subFile : files) {
-                    deleteFilesOnly(subFile);
+                for (File file : files) {
+                    deleteFilesOnly(file);
                 }
             }
         } else {
-            return file.delete();
+            return f.delete();
         }
         return true;
     }
