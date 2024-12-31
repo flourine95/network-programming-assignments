@@ -1,46 +1,37 @@
 package lab3;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class FileSplitterAndJoiner {
     public static void main(String[] args) throws IOException {
-        long time = System.currentTimeMillis();
-        new FileSplitterAndJoiner().split("D:\\test\\Chuong01_LinuxOverview-đã gộp.pdf", 1024000);
-        System.out.println("Time: " + (System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        new FileSplitterAndJoiner().splitWithBuffer("D:\\test\\Chuong01_LinuxOverview-đã gộp.pdf", 1024000);
-        System.out.println("Time: " + (System.currentTimeMillis() - time));
+        String path = "C:\\Users\\flourine\\Downloads\\test\\Lab_8_Sentiment_Analysis_22130152_NguyenPhiLong.pdf";
+//        split(path, 1024 * 1024);
+        join(path + ".001");
     }
-    public void splitWithBuffer(String source, int pSize) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(source)));
-        int fileNo = 1;
+
+    public static void join(String partFilename) throws IOException {
+        String ext = getFileExtension(partFilename);
+        String dest = partFilename.substring(0, partFilename.lastIndexOf("."));
+        FileOutputStream fos = new FileOutputStream(dest + "joined." + ext);
+        int fileNum = 1;
         while (true) {
-            String part = source + "." + generatePartNumber(fileNo++);
-            System.out.println("Creating file: " + part);
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(part)));
-            boolean hasMoreData = dataCopyWithBuffer(bufferedReader, bufferedWriter, pSize);
-            bufferedWriter.close();
-            if (!hasMoreData) {
+            String src = dest +"." + generatePartNumber(fileNum);
+            System.out.println("Joining file: " + src);
+            File file = new File(src);
+            if (!file.exists()) {
                 break;
             }
+            FileInputStream fis = new FileInputStream(file);
+            dataCopy(fis, fos, file.length());
+            fis.close();
+            fileNum++;
         }
-        bufferedReader.close();
+        fos.flush();
+        fos.close();
     }
-    private boolean dataCopyWithBuffer(BufferedReader bufferedReader, BufferedWriter bufferedWriter, int pSize) throws IOException {
-        char[] buffer = new char[102400];
-        long remain = pSize;
-        while (remain > 0) {
-            int byteMustRead = remain > buffer.length ? buffer.length : (int) remain;
-            int byteRead = bufferedReader.read(buffer);
-            if (byteRead == -1) {
-                return false;
-            }
-            bufferedWriter.write(buffer, 0, byteMustRead);
-            remain -= byteRead;
-        }
-        return true;
-    }
-    public void split(String source, int pSize) throws IOException {
+
+    public static void split(String source, int pSize) throws IOException {
         FileInputStream fis = new FileInputStream(source);
         int fileNo = 1;
         while (true) {
@@ -57,22 +48,36 @@ public class FileSplitterAndJoiner {
 
     }
 
-    private boolean dataCopy(FileInputStream fis, FileOutputStream fos, int pSize) throws IOException {
-        byte[] buffer = new byte[102400];
-        long remain = pSize;
-        while (remain > 0) {
-            int byteMustRead = remain > buffer.length ? buffer.length : (int) remain;
-            int byteRead = fis.read(buffer);
-            if (byteRead == -1) {
-                return false;
-            }
-            fos.write(buffer, 0, byteMustRead);
-            remain -= byteRead;
+    private static String getFileExtension(String filename) {
+        int lastDotIndex = filename.lastIndexOf(".");
+
+        int secondLastDotIndex = filename.lastIndexOf(".", lastDotIndex - 1);
+
+        if (secondLastDotIndex != -1) {
+            return filename.substring(secondLastDotIndex + 1, lastDotIndex);
         }
-        return true;
+        return "";
     }
 
-    private String generatePartNumber(int index) {
+
+
+    private static boolean dataCopy(FileInputStream input, FileOutputStream output, long pSize) throws IOException {
+        byte[] buff = new byte[1024*1024];
+        long remain = pSize;
+
+        while (remain > 0) {
+            int byteMustRead = (int) (remain > buff.length ? buff.length : remain);
+            int byteread = input.read(buff, 0, byteMustRead);
+            if (byteread == -1) return false;
+            output.write(buff, 0, byteread);
+            remain -= byteread;
+        }
+
+        return true;
+
+    }
+
+    private static String generatePartNumber(int index) {
         if (index < 10) {
             return "00" + index;
         } else if (index < 100) {
