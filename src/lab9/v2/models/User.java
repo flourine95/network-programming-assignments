@@ -1,6 +1,7 @@
 package lab9.v2.models;
 
 public class User {
+
     private String username;
     private String password;
 
